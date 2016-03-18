@@ -1,0 +1,54 @@
+<div id="fbtweet"></div>
+
+<script>
+(function() {
+    var Lib = {
+        ajax: {
+            xhr: function() {
+                var instance = new XMLHttpRequest();
+                return instance;
+            },
+            getJSON: function(options, callback) {
+                var xhttp = this.xhr();
+                options.url = options.url || location.href;
+                options.data = options.data || null;
+                callback = callback ||
+                function() {};
+                options.type = options.type || 'json';
+                var url = options.url;
+                if (options.type == 'jsonp') {
+                    window.jsonCallback = callback;
+                    var $url = url.replace('callback=?', 'callback=jsonCallback');
+                    var script = document.createElement('script');
+                    script.src = $url;
+                    document.body.appendChild(script);
+                }
+                xhttp.open('GET', options.url, true);
+                xhttp.send(options.data);
+                xhttp.onreadystatechange = function() {
+                    if (xhttp.status == 200 && xhttp.readyState == 4) {
+                        callback(xhttp.responseText);
+                    }
+                };
+            }
+        }
+    };
+
+    window.Lib = Lib;
+})()
+
+Lib.ajax.getJSON({
+    url: 'https://apis-guru.github.io/api-models/api/v1/list.json',
+    type: 'jsonp'
+}, function(jsondata) {
+    var hash = JSON.parse(jsondata)
+    var page = "";
+    for(i in hash){
+       var value = hash[i];
+       page += "<p><a href='"+value['versions'][value['preferred']]['swaggerYamlUrl']+"' target='_blank'>"+i+"</a></p>";
+   }
+   // 
+   document.querySelector('#fbtweet').innerHTML=(page);
+});
+	
+</script>

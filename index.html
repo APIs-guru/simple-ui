@@ -1,54 +1,43 @@
-<div id="fbtweet"></div>
-
-<script>
-(function() {
-    var Lib = {
-        ajax: {
-            xhr: function() {
-                var instance = new XMLHttpRequest();
-                return instance;
-            },
-            getJSON: function(options, callback) {
-                var xhttp = this.xhr();
-                options.url = options.url || location.href;
-                options.data = options.data || null;
-                callback = callback ||
-                function() {};
-                options.type = options.type || 'json';
-                var url = options.url;
-                if (options.type == 'jsonp') {
-                    window.jsonCallback = callback;
-                    var $url = url.replace('callback=?', 'callback=jsonCallback');
-                    var script = document.createElement('script');
-                    script.src = $url;
-                    document.body.appendChild(script);
-                }
-                xhttp.open('GET', options.url, true);
-                xhttp.send(options.data);
-                xhttp.onreadystatechange = function() {
-                    if (xhttp.status == 200 && xhttp.readyState == 4) {
-                        callback(xhttp.responseText);
-                    }
-                };
-            }
+<html>
+  <head>
+    <title>Simple UI for APIs.guru</title>
+    <meta name="description" content="Wikipedia for REST APIs"/>
+    <style>
+      body {
+        padding: 20px;
+        margin: 0;
+      }
+      p {
+        margin: 0;
+        padding: 2px;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>APIs.guru specs reference</h1>
+    <section id="links">Loading...</section>
+    <script type="text/javascript">
+      var rootUrl = 'https://apis-guru.github.io/api-models/';
+      var listUrl = rootUrl + 'api/v1/list.json';
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (xhttp.status != 200 || xhttp.readyState != 4)
+          return;
+        var specList = JSON.parse(xhttp.responseText)
+        var links = '';
+        for(var apiId in specList){
+          var api = specList[apiId];
+          for (var version in api.versions) {
+            var specUrl = api.versions[version].swaggerYamlUrl;
+            var specName = specUrl.replace(rootUrl, '');
+            links += '<p><a href="'+ specUrl +'" target="_blank">'+ specName +'</a></p>';
+          }
         }
-    };
-
-    window.Lib = Lib;
-})()
-
-Lib.ajax.getJSON({
-    url: 'https://apis-guru.github.io/api-models/api/v1/list.json',
-    type: 'jsonp'
-}, function(jsondata) {
-    var hash = JSON.parse(jsondata)
-    var page = "";
-    for(i in hash){
-       var value = hash[i];
-       page += "<p><a href='"+value['versions'][value['preferred']]['swaggerYamlUrl']+"' target='_blank'>"+i+"</a></p>";
-   }
-   // 
-   document.querySelector('#fbtweet').innerHTML=(page);
-});
-	
-</script>
+        document.getElementById('links').innerHTML = links;
+      };
+      xhttp.open('GET', listUrl, true);
+      xhttp.send(null);
+    </script>
+  </body>
+</html>

@@ -30,7 +30,7 @@
           var api = specList[apiId];
           for (var version in api.versions) {
             var specUrl = api.versions[version].swaggerYamlUrl;
-            var specName = specUrl.replace(rootUrl + 'specs', '');
+            var specName = specUrl.replace(rootUrl + 'specs/', '');
             links += '<p><a href="'+ specUrl +'" target="_blank">'+ specName +'</a></p>';
           }
         }

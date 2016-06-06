@@ -18,8 +18,8 @@
     <h1>APIs.guru specs reference</h1>
     <section id="links">Loading...</section>
     <script type="text/javascript">
-      var rootUrl = 'https://apis-guru.github.io/api-models/';
-      var listUrl = rootUrl + 'api/v1/list.json';
+      var rootUrl = 'https://api.apis.guru/v2/';
+      
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (xhttp.status != 200 || xhttp.readyState != 4)
@@ -30,13 +30,14 @@
           var api = specList[apiId];
           for (var version in api.versions) {
             var specUrl = api.versions[version].swaggerYamlUrl;
-            var specName = specUrl.replace(rootUrl, '');
+            var specName = specUrl.replace(rootUrl + 'specs', '');
             links += '<p><a href="'+ specUrl +'" target="_blank">'+ specName +'</a></p>';
           }
         }
         document.getElementById('links').innerHTML = links;
       };
-      xhttp.open('GET', listUrl, true);
+      
+      xhttp.open('GET', rootUrl + 'list.json', true);
       xhttp.send(null);
     </script>
   </body>

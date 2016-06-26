@@ -22,7 +22,7 @@
       
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
-        if (xhttp.status != 200 || xhttp.readyState != 4)
+        if (xhttp.readyState != 4 || xhttp.status != 200)
           return;
         var specList = JSON.parse(xhttp.responseText)
         var links = '';

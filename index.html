@@ -21,9 +21,10 @@
       var rootUrl = 'https://api.apis.guru/v2/';
       
       var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (xhttp.readyState != 4 || xhttp.status != 200)
+      xhttp.onload = function() {
+        if (xhttp.status != 200)
           return;
+
         var specList = JSON.parse(xhttp.responseText)
         var links = '';
         for(var apiId in specList){

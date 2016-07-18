@@ -19,7 +19,7 @@
     <section id="links">Loading...</section>
     <script type="text/javascript">
       var rootUrl = 'https://api.apis.guru/v2/';
-      
+
       var xhttp = new XMLHttpRequest();
       xhttp.onload = function() {
         if (xhttp.status != 200)
@@ -37,7 +37,7 @@
         }
         document.getElementById('links').innerHTML = links;
       };
-      
+
       xhttp.open('GET', rootUrl + 'list.json', true);
       xhttp.send(null);
     </script>

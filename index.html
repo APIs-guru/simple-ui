@@ -18,6 +18,11 @@
     <h1>APIs.guru specs reference</h1>
     <section id="links">Loading...</section>
     <script type="text/javascript">
+      var urlTemplate = '{swaggerYaml}';
+      var match = window.location.search.match(/^\?urlTemplate=(.*)$/);
+      if (match)
+        urlTemplate = decodeURIComponent(match[1]);
+
       var rootUrl = 'https://api.apis.guru/v2/';
 
       var xhttp = new XMLHttpRequest();
@@ -30,9 +35,13 @@
         for(var apiId in specList){
           var api = specList[apiId];
           for (var version in api.versions) {
-            var specUrl = api.versions[version].swaggerYamlUrl;
-            var specName = specUrl.replace(rootUrl + 'specs/', '');
-            links += '<p><a href="'+ specUrl +'" target="_blank">'+ specName +'</a></p>';
+            var swaggerYaml = api.versions[version].swaggerYamlUrl;
+            var swaggerJson = api.versions[version].swaggerUrl;
+
+            var specName = swaggerYaml.replace(rootUrl + 'specs/', '');
+            var href = urlTemplate.replace('{swaggerYaml}', swaggerYaml)
+                                  .replace('{swaggerJson}', swaggerJson);
+            links += '<p><a href="'+ href +'" target="_blank">'+ specName +'</a></p>';
           }
         }
         document.getElementById('links').innerHTML = links;
